@@ -100,38 +100,6 @@ class _ProfileTabState extends State<ProfileTab> {
                       ),
                     ),
                     const SizedBox(height: 24),
-
-                    // Stats cards
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildStatCard(
-                            context,
-                            '12',
-                            'Courses',
-                            Icons.book_rounded,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: _buildStatCard(
-                            context,
-                            '8',
-                            'Certificates',
-                            Icons.emoji_events_rounded,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: _buildStatCard(
-                            context,
-                            '45h',
-                            'Learning Time',
-                            Icons.access_time_rounded,
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),

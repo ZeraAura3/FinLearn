@@ -13,12 +13,12 @@ class _CoursesTabState extends State<CoursesTab> {
   String _selectedCategory = 'All';
   final List<String> _categories = [
     'All',
-    'Personal Finance',
-    'Investing',
-    'Cryptocurrency',
-    'Real Estate',
-    'Retirement',
-    'Taxes',
+    'Foundational',
+    'Technical & Trading-Oriented Finance',
+    'Fundamental & Valuation Finance',
+    'Derivatives & Advanced Instruments',
+    'Risk, Regulation & Taxation',
+    'Personal Finance & Wealth Management',
   ];
 
   @override

@@ -47,7 +47,7 @@ class HomeTab extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Hello, $userName! 👋',
+                              'Hello, $userName!',
                               style: textTheme.headlineSmall?.copyWith(
                                 color: colorScheme.onPrimary,
                               ),
@@ -142,32 +142,39 @@ class HomeTab extends StatelessWidget {
                         children: [
                           _buildCategoryCard(
                             context,
-                            'Personal\nFinance',
-                            Icons.account_balance_wallet_rounded,
+                            'Foundational',
+                            Icons.account_balance_rounded,
                             colorScheme.primary,
                           ),
                           _buildCategoryCard(
                             context,
-                            'Investing',
-                            Icons.trending_up_rounded,
+                            'Technical & Trading',
+                            Icons.candlestick_chart,
                             colorScheme.secondary,
                           ),
                           _buildCategoryCard(
                             context,
-                            'Crypto',
-                            Icons.currency_bitcoin_rounded,
+                            'Fundamental & Valuation',
+                            Icons.analytics,
                             Colors.orange,
                           ),
                           _buildCategoryCard(
                             context,
-                            'Real Estate',
-                            Icons.home_rounded,
+                            'Derivatives',
+                            Icons.currency_exchange,
                             Colors.brown,
                           ),
                           _buildCategoryCard(
                             context,
-                            'Retirement',
-                            Icons.elderly_rounded,
+                            'Risk, Tax & Regulations',
+                            Icons.receipt_long_rounded,
+                            Colors.blue,
+                          ),
+                          _buildCategoryCard(
+                            context,
+                            'Personal Finance',
+                            Icons.account_balance_wallet_rounded,
+
                             Colors.blue,
                           ),
                         ],
