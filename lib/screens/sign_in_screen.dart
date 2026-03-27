@@ -1,6 +1,7 @@
 import 'package:finlearn/screens/main_screen.dart';
 import 'package:finlearn/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:finlearn/l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -42,10 +43,10 @@ class _SignInScreenState extends State<SignInScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Row(
-                children: const [
-                  Icon(Icons.check_circle, color: Colors.white),
-                  SizedBox(width: 12),
-                  Text('Welcome back!'),
+                children: [
+                  const Icon(Icons.check_circle, color: Colors.white),
+                  const SizedBox(width: 12),
+                  Text(AppLocalizations.of(context)!.translate('welcome_back')),
                 ],
               ),
               backgroundColor: Colors.green,
@@ -114,20 +115,22 @@ class _SignInScreenState extends State<SignInScreen> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Reset Password'),
+        title: Text(AppLocalizations.of(context)!.translate('reset_password')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Enter your email address and we\'ll send you a link to reset your password.',
+            Text(
+              AppLocalizations.of(context)!.translate('reset_password_desc'),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                labelText: 'Email',
+                labelText: AppLocalizations.of(
+                  context,
+                )!.translate('email_address'),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -143,13 +146,15 @@ class _SignInScreenState extends State<SignInScreen> {
           TextButton(
             onPressed: () => Navigator.pop(context, false),
             child: Text(
-              'Cancel',
+              AppLocalizations.of(context)!.translate('cancel'),
               style: TextStyle(color: theme.colorScheme.secondary),
             ),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Send Reset Link'),
+            child: Text(
+              AppLocalizations.of(context)!.translate('send_reset_link'),
+            ),
           ),
         ],
       ),
@@ -162,11 +167,15 @@ class _SignInScreenState extends State<SignInScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Row(
-                children: const [
-                  Icon(Icons.check_circle, color: Colors.white),
-                  SizedBox(width: 12),
+                children: [
+                  const Icon(Icons.check_circle, color: Colors.white),
+                  const SizedBox(width: 12),
                   Expanded(
-                    child: Text('Password reset link sent to your email'),
+                    child: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.translate('reset_link_sent'),
+                    ),
                   ),
                 ],
               ),
@@ -240,13 +249,13 @@ class _SignInScreenState extends State<SignInScreen> {
 
                   // Welcome text
                   Text(
-                    'Welcome Back!',
+                    AppLocalizations.of(context)!.translate('welcome_back'),
                     textAlign: TextAlign.center,
                     style: textTheme.displaySmall,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Sign in to continue your learning journey',
+                    AppLocalizations.of(context)!.translate('sign_in_continue'),
                     textAlign: TextAlign.center,
                     style: textTheme.bodyMedium,
                   ),
@@ -258,8 +267,12 @@ class _SignInScreenState extends State<SignInScreen> {
                     keyboardType: TextInputType.emailAddress,
                     style: textTheme.bodyLarge,
                     decoration: InputDecoration(
-                      labelText: 'Email Address',
-                      hintText: 'Enter your email',
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.translate('email_address'),
+                      hintText: AppLocalizations.of(
+                        context,
+                      )!.translate('enter_email'),
                       prefixIcon: const Icon(Icons.email_outlined),
                       filled: true,
                       fillColor: colorScheme.surfaceVariant,
@@ -270,10 +283,14 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
+                        return AppLocalizations.of(
+                          context,
+                        )!.translate('enter_your_email_required');
                       }
                       if (!value.contains('@')) {
-                        return 'Please enter a valid email';
+                        return AppLocalizations.of(
+                          context,
+                        )!.translate('enter_valid_email');
                       }
                       return null;
                     },
@@ -286,8 +303,12 @@ class _SignInScreenState extends State<SignInScreen> {
                     obscureText: _obscurePassword,
                     style: textTheme.bodyLarge,
                     decoration: InputDecoration(
-                      labelText: 'Password',
-                      hintText: 'Enter your password',
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.translate('password'),
+                      hintText: AppLocalizations.of(
+                        context,
+                      )!.translate('enter_password'),
                       prefixIcon: const Icon(Icons.lock_outline),
                       filled: true,
                       fillColor: colorScheme.surfaceVariant,
@@ -308,10 +329,14 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
+                        return AppLocalizations.of(
+                          context,
+                        )!.translate('enter_password');
                       }
                       if (value.length < 6) {
-                        return 'Password must be at least 6 characters';
+                        return AppLocalizations.of(
+                          context,
+                        )!.translate('enter_password_chars');
                       }
                       return null;
                     },
@@ -323,7 +348,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: TextButton(
                       onPressed: _forgotPassword,
                       child: Text(
-                        'Forgot Password?',
+                        AppLocalizations.of(
+                          context,
+                        )!.translate('forgot_password'),
                         style: textTheme.bodyMedium?.copyWith(
                           color: colorScheme.primary,
                           fontWeight: FontWeight.w600,
@@ -347,7 +374,11 @@ class _SignInScreenState extends State<SignInScreen> {
                                 color: Colors.white,
                               ),
                             )
-                          : const Text('Sign In'),
+                          : Text(
+                              AppLocalizations.of(
+                                context,
+                              )!.translate('sign_in'),
+                            ),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -358,7 +389,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       Expanded(child: Divider(color: Colors.grey.shade300)),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text('OR', style: textTheme.bodySmall),
+                        child: Text(
+                          AppLocalizations.of(context)!.translate('or'),
+                          style: textTheme.bodySmall,
+                        ),
                       ),
                       Expanded(child: Divider(color: Colors.grey.shade300)),
                     ],
@@ -370,7 +404,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Don't have an account? ",
+                        AppLocalizations.of(
+                          context,
+                        )!.translate('dont_have_account'),
                         style: textTheme.bodyMedium,
                       ),
                       TextButton(
@@ -383,7 +419,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           );
                         },
                         child: Text(
-                          'Sign Up',
+                          AppLocalizations.of(context)!.translate('sign_up'),
                           style: textTheme.bodyMedium?.copyWith(
                             color: colorScheme.primary,
                             fontWeight: FontWeight.bold,

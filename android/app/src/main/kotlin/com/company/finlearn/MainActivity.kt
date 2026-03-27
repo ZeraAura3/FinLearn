@@ -1,4 +1,4 @@
-package com.example.finlearn
+package com.company.finlearn
 
 import io.flutter.embedding.android.FlutterActivity
 

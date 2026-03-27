@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:finlearn/l10n/app_localizations.dart';
 
 class ProjectsTab extends StatelessWidget {
   const ProjectsTab({super.key});
@@ -70,14 +71,16 @@ class ProjectsTab extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Projects',
+                      AppLocalizations.of(context)!.translate('projects_title'),
                       style: textTheme.displaySmall?.copyWith(
                         color: colorScheme.onPrimary,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Apply what you\'ve learned in real-world projects',
+                      AppLocalizations.of(
+                        context,
+                      )!.translate('projects_subtitle'),
                       style: textTheme.bodyMedium?.copyWith(
                         color: colorScheme.onPrimary.withOpacity(0.9),
                       ),
@@ -90,7 +93,9 @@ class ProjectsTab extends StatelessWidget {
                         Expanded(
                           child: _buildStatCard(
                             context,
-                            'In Progress',
+                            AppLocalizations.of(
+                              context,
+                            )!.translate('in_progress'),
                             '${inProgressProjects.length}',
                             Icons.pending_actions_rounded,
                           ),
@@ -99,7 +104,9 @@ class ProjectsTab extends StatelessWidget {
                         Expanded(
                           child: _buildStatCard(
                             context,
-                            'Completed',
+                            AppLocalizations.of(
+                              context,
+                            )!.translate('completed'),
                             '0',
                             Icons.check_circle_rounded,
                           ),
@@ -108,7 +115,9 @@ class ProjectsTab extends StatelessWidget {
                         Expanded(
                           child: _buildStatCard(
                             context,
-                            'Available',
+                            AppLocalizations.of(
+                              context,
+                            )!.translate('available'),
                             '${availableProjects.length}',
                             Icons.folder_open_rounded,
                           ),
@@ -125,7 +134,10 @@ class ProjectsTab extends StatelessWidget {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 12),
-                  child: Text('In Progress', style: textTheme.headlineSmall),
+                  child: Text(
+                    AppLocalizations.of(context)!.translate('in_progress'),
+                    style: textTheme.headlineSmall,
+                  ),
                 ),
               ),
               SliverPadding(
@@ -149,7 +161,12 @@ class ProjectsTab extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Available Projects', style: textTheme.headlineSmall),
+                    Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.translate('available_projects'),
+                      style: textTheme.headlineSmall,
+                    ),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -160,7 +177,7 @@ class ProjectsTab extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16.0),
                       ),
                       child: Text(
-                        '${availableProjects.length} New',
+                        '${availableProjects.length} ${AppLocalizations.of(context)!.translate('new_tag')}',
                         style: textTheme.bodySmall?.copyWith(
                           color: colorScheme.secondary,
                           fontWeight: FontWeight.w600,
@@ -193,7 +210,7 @@ class ProjectsTab extends StatelessWidget {
         backgroundColor: colorScheme.primary,
         icon: Icon(Icons.explore_rounded, color: colorScheme.onPrimary),
         label: Text(
-          'Browse All',
+          AppLocalizations.of(context)!.translate('browse_all'),
           style: TextStyle(color: colorScheme.onPrimary),
         ),
       ),

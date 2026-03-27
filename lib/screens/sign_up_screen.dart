@@ -1,6 +1,7 @@
 import 'package:finlearn/screens/main_screen.dart';
 import 'package:finlearn/screens/sign_in_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:finlearn/l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -47,10 +48,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Row(
-                children: const [
-                  Icon(Icons.check_circle, color: Colors.white),
-                  SizedBox(width: 12),
-                  Text('Account created successfully!'),
+                children: [
+                  const Icon(Icons.check_circle, color: Colors.white),
+                  const SizedBox(width: 12),
+                  Text(
+                    AppLocalizations.of(context)!.translate('account_created'),
+                  ),
                 ],
               ),
               backgroundColor: Colors.green,
@@ -151,13 +154,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   // Welcome text
                   Text(
-                    'Create Account',
+                    AppLocalizations.of(context)!.translate('create_account'),
                     textAlign: TextAlign.center,
                     style: textTheme.displaySmall,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Start your financial learning journey today',
+                    AppLocalizations.of(context)!.translate('sign_up_subtitle'),
                     textAlign: TextAlign.center,
                     style: textTheme.bodyMedium,
                   ),
@@ -169,8 +172,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     textCapitalization: TextCapitalization.words,
                     style: textTheme.bodyLarge,
                     decoration: InputDecoration(
-                      labelText: 'Full Name',
-                      hintText: 'Enter your full name',
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.translate('full_name'),
+                      hintText: AppLocalizations.of(
+                        context,
+                      )!.translate('enter_full_name'),
                       prefixIcon: const Icon(Icons.person_outline),
                       filled: true,
                       fillColor: colorScheme.surfaceVariant,
@@ -181,7 +188,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your name';
+                        return AppLocalizations.of(
+                          context,
+                        )!.translate('enter_name_required');
                       }
                       return null;
                     },
@@ -194,8 +203,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     keyboardType: TextInputType.emailAddress,
                     style: textTheme.bodyLarge,
                     decoration: InputDecoration(
-                      labelText: 'Email Address',
-                      hintText: 'Enter your email',
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.translate('email_address'),
+                      hintText: AppLocalizations.of(
+                        context,
+                      )!.translate('enter_email'),
                       prefixIcon: const Icon(Icons.email_outlined),
                       filled: true,
                       fillColor: colorScheme.surfaceVariant,
@@ -206,10 +219,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
+                        return AppLocalizations.of(
+                          context,
+                        )!.translate('enter_your_email_required');
                       }
                       if (!value.contains('@')) {
-                        return 'Please enter a valid email';
+                        return AppLocalizations.of(
+                          context,
+                        )!.translate('enter_valid_email');
                       }
                       return null;
                     },
@@ -222,8 +239,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     obscureText: _obscurePassword,
                     style: textTheme.bodyLarge,
                     decoration: InputDecoration(
-                      labelText: 'Password',
-                      hintText: 'Create a password',
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.translate('password'),
+                      hintText: AppLocalizations.of(
+                        context,
+                      )!.translate('create_password'),
                       prefixIcon: const Icon(Icons.lock_outline),
                       filled: true,
                       fillColor: colorScheme.surfaceVariant,
@@ -244,10 +265,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
+                        return AppLocalizations.of(
+                          context,
+                        )!.translate('enter_password');
                       }
                       if (value.length < 6) {
-                        return 'Password must be at least 6 characters';
+                        return AppLocalizations.of(
+                          context,
+                        )!.translate('enter_password_chars');
                       }
                       return null;
                     },
@@ -260,8 +285,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     obscureText: _obscureConfirmPassword,
                     style: textTheme.bodyLarge,
                     decoration: InputDecoration(
-                      labelText: 'Confirm Password',
-                      hintText: 'Re-enter your password',
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.translate('confirm_password'),
+                      hintText: AppLocalizations.of(
+                        context,
+                      )!.translate('re_enter_password'),
                       prefixIcon: const Icon(Icons.lock_outline),
                       filled: true,
                       fillColor: colorScheme.surfaceVariant,
@@ -285,10 +314,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please confirm your password';
+                        return AppLocalizations.of(
+                          context,
+                        )!.translate('confirm_password_required');
                       }
                       if (value != _passwordController.text) {
-                        return 'Passwords do not match';
+                        return AppLocalizations.of(
+                          context,
+                        )!.translate('passwords_no_match');
                       }
                       return null;
                     },
@@ -309,7 +342,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 color: Colors.white,
                               ),
                             )
-                          : const Text('Sign Up'),
+                          : Text(
+                              AppLocalizations.of(
+                                context,
+                              )!.translate('sign_up'),
+                            ),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -332,7 +369,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Already have an account? ',
+                        AppLocalizations.of(
+                          context,
+                        )!.translate('already_have_account'),
                         style: textTheme.bodyMedium,
                       ),
                       TextButton(
@@ -345,7 +384,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           );
                         },
                         child: Text(
-                          'Sign In',
+                          AppLocalizations.of(context)!.translate('sign_in'),
                           style: textTheme.bodyMedium?.copyWith(
                             color: colorScheme.primary,
                             fontWeight: FontWeight.bold,

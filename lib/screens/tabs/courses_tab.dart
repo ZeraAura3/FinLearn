@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:finlearn/l10n/app_localizations.dart';
 import '../../models/course.dart';
 import '../course_detail_screen.dart';
 
@@ -34,7 +35,10 @@ class _CoursesTabState extends State<CoursesTab> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Courses', style: textTheme.headlineSmall),
+        title: Text(
+          AppLocalizations.of(context)!.translate('all_courses'),
+          style: textTheme.headlineSmall,
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [

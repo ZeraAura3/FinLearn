@@ -1,6 +1,7 @@
 import 'package:finlearn/screens/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:finlearn/l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -13,26 +14,38 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final List<OnboardingItem> _onboardingItems = [
-    OnboardingItem(
-      icon: Icons.school_rounded,
-      title: 'Learn Finance Basics',
-      description:
-          'Master the fundamentals of personal finance, investing, and money management',
-    ),
-    OnboardingItem(
-      icon: Icons.trending_up_rounded,
-      title: 'Track Your Progress',
-      description:
-          'Monitor your learning journey and achieve your financial education goals',
-    ),
-    OnboardingItem(
-      icon: Icons.emoji_events_rounded,
-      title: 'Earn Certificates',
-      description:
-          'Complete courses and earn certificates to showcase your financial knowledge',
-    ),
-  ];
+  List<OnboardingItem> get _onboardingItems {
+    final localizations = AppLocalizations.of(context);
+    return [
+      OnboardingItem(
+        icon: Icons.school_rounded,
+        title:
+            localizations?.translate('onboarding_learn_basics') ??
+            'Learn Finance Basics',
+        description:
+            localizations?.translate('onboarding_learn_basics_desc') ??
+            'Master the fundamentals of personal finance, investing, and money management',
+      ),
+      OnboardingItem(
+        icon: Icons.trending_up_rounded,
+        title:
+            localizations?.translate('onboarding_track_progress') ??
+            'Track Your Progress',
+        description:
+            localizations?.translate('onboarding_track_progress_desc') ??
+            'Monitor your learning journey and achieve your financial education goals',
+      ),
+      OnboardingItem(
+        icon: Icons.emoji_events_rounded,
+        title:
+            localizations?.translate('onboarding_earn_cert') ??
+            'Earn Certificates',
+        description:
+            localizations?.translate('onboarding_earn_cert_desc') ??
+            'Complete courses and earn certificates to showcase your financial knowledge',
+      ),
+    ];
+  }
 
   @override
   void dispose() {
@@ -59,7 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: TextButton(
                   onPressed: () => _navigateToSignIn(),
                   child: Text(
-                    'Skip',
+                    AppLocalizations.of(context)!.translate('skip'),
                     style: textTheme.labelLarge?.copyWith(
                       color: colorScheme.secondary,
                     ),
@@ -122,7 +135,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                         ),
                         child: Text(
-                          'Back',
+                          AppLocalizations.of(context)!.translate('back'),
                           style: textTheme.labelLarge?.copyWith(
                             color: colorScheme.primary,
                           ),
@@ -145,8 +158,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       },
                       child: Text(
                         _currentPage == _onboardingItems.length - 1
-                            ? 'Get Started'
-                            : 'Next',
+                            ? AppLocalizations.of(
+                                context,
+                              )!.translate('get_started')
+                            : AppLocalizations.of(context)!.translate('next'),
                       ),
                     ),
                   ),

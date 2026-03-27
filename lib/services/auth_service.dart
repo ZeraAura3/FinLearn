@@ -9,6 +9,9 @@ class AuthService {
   // Auth state changes stream
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
+  // User changes stream (fires on profile updates too)
+  Stream<User?> get userChanges => _auth.userChanges();
+
   // Sign in with email and password
   Future<UserCredential?> signInWithEmailPassword(
     String email,
@@ -79,6 +82,42 @@ class AuthService {
     } catch (e) {
       print('AuthService: Unknown error - $e');
       throw 'An unexpected error occurred. Please try again.';
+    }
+  }
+
+  // Update Display Name
+  Future<void> updateDisplayName(String name) async {
+    try {
+      await _auth.currentUser?.updateDisplayName(name);
+      await _auth.currentUser?.reload();
+    } on FirebaseAuthException catch (e) {
+      throw _handleAuthException(e);
+    } catch (e) {
+      throw 'Could not update profile name.';
+    }
+  }
+
+  // Change Password
+  Future<void> changePassword(
+    String currentPassword,
+    String newPassword,
+  ) async {
+    final user = _auth.currentUser;
+    if (user != null && user.email != null) {
+      try {
+        final credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: currentPassword,
+        );
+        await user.reauthenticateWithCredential(credential);
+        await user.updatePassword(newPassword);
+      } on FirebaseAuthException catch (e) {
+        throw _handleAuthException(e);
+      } catch (e) {
+        throw 'Could not change password. Please ensuring you entered the correct current password.';
+      }
+    } else {
+      throw 'User not signed in.';
     }
   }
 

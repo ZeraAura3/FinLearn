@@ -9,14 +9,20 @@ import 'screens/sign_up_screen.dart';
 import 'screens/main_screen.dart';
 import 'theme/app_theme.dart';
 import 'providers/theme_provider.dart';
+import 'providers/language_provider.dart';
+import 'l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -27,9 +33,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
-      builder: (context, themeProvider, child) {
-        if (!themeProvider.isInitialized) {
+    return Consumer2<ThemeProvider, LanguageProvider>(
+      builder: (context, themeProvider, languageProvider, child) {
+        if (!themeProvider.isInitialized || !languageProvider.isInitialized) {
           return const Center(child: CircularProgressIndicator());
         }
         return MaterialApp(
@@ -38,6 +44,24 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: themeProvider.themeMode,
+          locale: languageProvider.locale,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en'),
+            Locale('es'),
+            Locale('fr'),
+            Locale('de'),
+            Locale('hi'),
+            Locale('zh'),
+            Locale('ta'),
+            Locale('te'),
+            Locale('kn'),
+          ],
           home: const AuthWrapper(),
           routes: {
             '/onboarding': (context) => const OnboardingScreen(),
@@ -61,10 +85,6 @@ class AuthWrapper extends StatelessWidget {
     return StreamBuilder(
       stream: authService.authStateChanges,
       builder: (context, snapshot) {
-        print(
-          'AuthWrapper: ConnectionState = ${snapshot.connectionState}, HasData = ${snapshot.hasData}, User = ${snapshot.data?.email}',
-        );
-
         // Show loading indicator while checking auth state
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
@@ -85,10 +105,8 @@ class AuthWrapper extends StatelessWidget {
 
         // Navigate based on auth state
         if (snapshot.hasData) {
-          print('AuthWrapper: User authenticated, navigating to MainScreen');
           return const MainScreen();
         } else {
-          print('AuthWrapper: No user, showing OnboardingScreen');
           return const OnboardingScreen();
         }
       },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:finlearn/l10n/app_localizations.dart';
 import '../models/course.dart';
 
 class CourseDetailScreen extends StatelessWidget {
@@ -193,7 +194,9 @@ class CourseDetailScreen extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                'Course Instructor',
+                                AppLocalizations.of(
+                                  context,
+                                )!.translate('course_instructor'),
                                 style: textTheme.bodySmall,
                               ),
                             ],

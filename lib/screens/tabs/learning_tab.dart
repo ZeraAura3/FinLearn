@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:finlearn/l10n/app_localizations.dart';
 import '../../models/course.dart';
 import '../course_detail_screen.dart';
 
@@ -21,7 +22,10 @@ class LearningTab extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('My Learning', style: textTheme.headlineSmall),
+          title: Text(
+            AppLocalizations.of(context)!.translate('my_learning'),
+            style: textTheme.headlineSmall,
+          ),
           backgroundColor: Colors.transparent,
           elevation: 0,
           bottom: TabBar(
@@ -31,9 +35,9 @@ class LearningTab extends StatelessWidget {
             labelStyle: textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w600,
             ),
-            tabs: const [
-              Tab(text: 'In Progress'),
-              Tab(text: 'Completed'),
+            tabs: [
+              Tab(text: AppLocalizations.of(context)!.translate('in_progress')),
+              Tab(text: AppLocalizations.of(context)!.translate('completed')),
             ],
           ),
         ),
@@ -44,8 +48,12 @@ class LearningTab extends StatelessWidget {
                 ? _buildEmptyState(
                     context,
                     icon: Icons.school_outlined,
-                    title: 'No courses in progress',
-                    subtitle: 'Start a course to see it here',
+                    title: AppLocalizations.of(
+                      context,
+                    )!.translate('no_courses_in_progress'),
+                    subtitle: AppLocalizations.of(
+                      context,
+                    )!.translate('start_course_hint'),
                   )
                 : ListView.builder(
                     padding: const EdgeInsets.all(24.0),
@@ -63,8 +71,12 @@ class LearningTab extends StatelessWidget {
                 ? _buildEmptyState(
                     context,
                     icon: Icons.emoji_events_outlined,
-                    title: 'No completed courses yet',
-                    subtitle: 'Complete a course to earn your certificate',
+                    title: AppLocalizations.of(
+                      context,
+                    )!.translate('no_completed_courses'),
+                    subtitle: AppLocalizations.of(
+                      context,
+                    )!.translate('complete_course_hint'),
                   )
                 : ListView.builder(
                     padding: const EdgeInsets.all(24.0),
@@ -200,14 +212,14 @@ class LearningTab extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '${(course.progress * 100).toInt()}% Complete',
+                              '${(course.progress * 100).toInt()}% ${AppLocalizations.of(context)!.translate('complete')}',
                               style: textTheme.bodySmall?.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
-                              '${course.lessons} lessons',
+                              '${course.lessons} ${AppLocalizations.of(context)!.translate('lessons')}',
                               style: textTheme.bodySmall?.copyWith(
                                 color: Colors.white,
                               ),
@@ -276,7 +288,9 @@ class LearningTab extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: Text(
-                          'Continue',
+                          AppLocalizations.of(
+                            context,
+                          )!.translate('continue_learning'),
                           style: textTheme.bodySmall?.copyWith(
                             color: colorScheme.onPrimary,
                             fontWeight: FontWeight.w600,
@@ -338,7 +352,7 @@ class LearningTab extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
-          'Completed • ${course.instructor}',
+          '${AppLocalizations.of(context)!.translate('completed')} • ${course.instructor}',
           style: textTheme.bodySmall?.copyWith(
             color: Colors.green,
           ), // Consider theme color

@@ -4,6 +4,7 @@ class PreferencesService {
   static const String _languageKey = 'language';
   static const String _downloadQualityKey = 'downloadQuality';
   static const String _notificationsKey = 'notifications';
+  static const String _emailNotificationsKey = 'email_notifications';
 
   // Language
   Future<String> getLanguage() async {
@@ -36,5 +37,16 @@ class PreferencesService {
   Future<void> setNotifications(bool enabled) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_notificationsKey, enabled);
+  }
+
+  // Email Notifications
+  Future<bool> getEmailNotifications() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_emailNotificationsKey) ?? true;
+  }
+
+  Future<void> setEmailNotifications(bool enabled) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_emailNotificationsKey, enabled);
   }
 }

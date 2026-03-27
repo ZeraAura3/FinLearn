@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../services/auth_service.dart';
 import '../../services/preferences_service.dart';
 import '../../providers/theme_provider.dart';
+import '../../providers/language_provider.dart';
+import '../../l10n/app_localizations.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
@@ -17,6 +19,7 @@ class _ProfileTabState extends State<ProfileTab> {
   String _selectedLanguage = 'English';
   String _downloadQuality = 'HD';
   bool _notificationsEnabled = true;
+  bool _emailNotificationsEnabled = true;
 
   @override
   void initState() {
@@ -28,11 +31,13 @@ class _ProfileTabState extends State<ProfileTab> {
     final language = await _prefs.getLanguage();
     final quality = await _prefs.getDownloadQuality();
     final notifications = await _prefs.getNotifications();
+    final emailNotifications = await _prefs.getEmailNotifications();
 
     setState(() {
       _selectedLanguage = language;
       _downloadQuality = quality;
       _notificationsEnabled = notifications;
+      _emailNotificationsEnabled = emailNotifications;
     });
   }
 
@@ -43,7 +48,8 @@ class _ProfileTabState extends State<ProfileTab> {
     final colorScheme = theme.colorScheme;
     final user = AuthService().currentUser;
     final userEmail = user?.email ?? 'user@example.com';
-    final userName = userEmail.split('@')[0];
+    final userName = user?.displayName ?? userEmail.split('@')[0];
+    final localizations = AppLocalizations.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -111,84 +117,108 @@ class _ProfileTabState extends State<ProfileTab> {
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
                   children: [
-                    _buildMenuSection('Account', [
-                      _buildMenuItem(
-                        context,
-                        Icons.person_outline,
-                        'Edit Profile',
-                        () => _showEditProfileDialog(context),
-                      ),
-                      _buildMenuItem(
-                        context,
-                        Icons.lock_outline,
-                        'Change Password',
-                        () => _showChangePasswordDialog(context),
-                      ),
-                      _buildMenuItem(
-                        context,
-                        Icons.notifications_outlined,
-                        'Notifications',
-                        () => _showNotificationsDialog(context),
-                      ),
-                    ]),
+                    _buildMenuSection(
+                      localizations?.translate('account') ?? 'Account',
+                      [
+                        _buildMenuItem(
+                          context,
+                          Icons.person_outline,
+                          localizations?.translate('edit_profile') ??
+                              'Edit Profile',
+                          () => _showEditProfileDialog(context),
+                        ),
+                        _buildMenuItem(
+                          context,
+                          Icons.lock_outline,
+                          localizations?.translate('change_password') ??
+                              'Change Password',
+                          () => _showChangePasswordDialog(context),
+                        ),
+                        _buildMenuItem(
+                          context,
+                          Icons.notifications_outlined,
+                          localizations?.translate('notifications') ??
+                              'Notifications',
+                          () => _showNotificationsDialog(context),
+                        ),
+                      ],
+                    ),
 
                     const SizedBox(height: 24),
 
-                    _buildMenuSection('Preferences', [
-                      Consumer<ThemeProvider>(
-                        builder: (context, themeProvider, child) {
-                          return _buildMenuItem(
-                            context,
-                            Icons.dark_mode_outlined,
-                            'Dark Mode',
-                            () {},
-                            trailing: Switch(
-                              value: themeProvider.isDarkMode,
-                              onChanged: (value) {
-                                themeProvider.toggleTheme();
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                      _buildMenuItem(
-                        context,
-                        Icons.language_rounded,
-                        'Language',
-                        () => _showLanguageDialog(context),
-                        trailing: _selectedLanguage,
-                      ),
-                      _buildMenuItem(
-                        context,
-                        Icons.download_outlined,
-                        'Download Quality',
-                        () => _showDownloadQualityDialog(context),
-                        trailing: _downloadQuality,
-                      ),
-                    ]),
+                    _buildMenuSection(
+                      localizations?.translate('preferences') ?? 'Preferences',
+                      [
+                        Consumer<ThemeProvider>(
+                          builder: (context, themeProvider, child) {
+                            return _buildMenuItem(
+                              context,
+                              Icons.dark_mode_outlined,
+                              localizations?.translate('dark_mode') ??
+                                  'Dark Mode',
+                              () {},
+                              trailing: Switch(
+                                value: themeProvider.isDarkMode,
+                                onChanged: (value) {
+                                  themeProvider.toggleTheme();
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                        Consumer<LanguageProvider>(
+                          builder: (context, languageProvider, child) {
+                            return _buildMenuItem(
+                              context,
+                              Icons.language_rounded,
+                              localizations?.translate('language') ??
+                                  'Language',
+                              () => _showLanguageDialog(context),
+                              trailing: languageProvider.getLanguageName(
+                                languageProvider.locale,
+                              ),
+                            );
+                          },
+                        ),
+                        _buildMenuItem(
+                          context,
+                          Icons.download_outlined,
+                          localizations?.translate('download_quality') ??
+                              'Download Quality',
+                          () => _showDownloadQualityDialog(context),
+                          trailing: _downloadQuality,
+                        ),
+                      ],
+                    ),
 
                     const SizedBox(height: 24),
 
-                    _buildMenuSection('Support', [
-                      _buildMenuItem(
-                        context,
-                        Icons.help_outline,
-                        'Help Center',
-                        () => _launchURL('https://finlearn.com/help'),
-                      ),
-                      _buildMenuItem(
-                        context,
-                        Icons.privacy_tip_outlined,
-                        'Privacy Policy',
-                        () => _launchURL('https://finlearn.com/privacy'),
-                      ),
-                      _buildMenuItem(
-                        context,
-                        Icons.description_outlined,
-                        'Terms of Service',
-                        () => _launchURL('https://finlearn.com/terms'),
-                      ),
-                    ]),
+                    _buildMenuSection(
+                      localizations?.translate('support') ?? 'Support',
+                      [
+                        _buildMenuItem(
+                          context,
+                          Icons.help_outline,
+                          localizations?.translate('help_center') ??
+                              'Help Center',
+                          () => _showHelpCenterDialog(context),
+                        ),
+                        _buildMenuItem(
+                          context,
+                          Icons.privacy_tip_outlined,
+                          localizations?.translate('privacy_policy') ??
+                              'Privacy Policy',
+                          () => _launchURL('https://finlearn.com/privacy'),
+                        ),
+                        _buildMenuItem(
+                          context,
+                          Icons.description_outlined,
+                          localizations?.translate('terms_of_service') ??
+                              'Terms of Service',
+                          () => _launchURL('https://finlearn.com/terms'),
+                        ),
+                      ],
+                    ),
 
                     const SizedBox(height: 24),
 
@@ -245,7 +275,7 @@ class _ProfileTabState extends State<ProfileTab> {
                             const Icon(Icons.logout_rounded, color: Colors.red),
                             const SizedBox(width: 8),
                             Text(
-                              'Logout',
+                              localizations?.translate('logout') ?? 'Logout',
                               style: textTheme.titleMedium?.copyWith(
                                 color: Colors.red,
                               ),
@@ -257,7 +287,10 @@ class _ProfileTabState extends State<ProfileTab> {
 
                     const SizedBox(height: 32),
 
-                    Text('Version 1.0.0', style: textTheme.bodySmall),
+                    Text(
+                      '${localizations?.translate('version') ?? 'Version'} 1.0.0',
+                      style: textTheme.bodySmall,
+                    ),
                     const SizedBox(height: 24),
                   ],
                 ),
@@ -390,7 +423,11 @@ class _ProfileTabState extends State<ProfileTab> {
     final nameController = TextEditingController();
     final emailController = TextEditingController();
     final user = AuthService().currentUser;
-    emailController.text = user?.email ?? '';
+
+    if (user != null) {
+      nameController.text = user.displayName ?? '';
+      emailController.text = user.email ?? '';
+    }
 
     showDialog(
       context: context,
@@ -423,12 +460,27 @@ class _ProfileTabState extends State<ProfileTab> {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
-              // Save profile
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Profile updated successfully')),
-              );
+            onPressed: () async {
+              try {
+                await AuthService().updateDisplayName(
+                  nameController.text.trim(),
+                );
+                if (mounted) {
+                  setState(() {}); // Refresh UI to show new name
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Profile updated successfully'),
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(e.toString())));
+                }
+              }
             },
             child: const Text('Save'),
           ),
@@ -441,67 +493,109 @@ class _ProfileTabState extends State<ProfileTab> {
     final currentPasswordController = TextEditingController();
     final newPasswordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
+    bool isLoading = false;
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Change Password'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: currentPasswordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Current Password',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: newPasswordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'New Password',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: confirmPasswordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Confirm Password',
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (newPasswordController.text ==
-                  confirmPasswordController.text) {
-                // Change password
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Password changed successfully'),
+      barrierDismissible: false, // Prevent dismissing while loading
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: const Text('Change Password'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: currentPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Current Password',
+                    border: OutlineInputBorder(),
                   ),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Passwords do not match')),
-                );
-              }
-            },
-            child: const Text('Change'),
-          ),
-        ],
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: newPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'New Password',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: confirmPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Confirm Password',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                if (isLoading) ...[
+                  const SizedBox(height: 16),
+                  const LinearProgressIndicator(),
+                ],
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: isLoading ? null : () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        if (newPasswordController.text !=
+                            confirmPasswordController.text) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Passwords do not match'),
+                            ),
+                          );
+                          return;
+                        }
+
+                        if (newPasswordController.text.length < 6) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Password must be at least 6 characters',
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+
+                        setState(() => isLoading = true);
+
+                        try {
+                          await AuthService().changePassword(
+                            currentPasswordController.text,
+                            newPasswordController.text,
+                          );
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Password changed successfully'),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(e.toString())),
+                            );
+                            setState(() => isLoading = false);
+                          }
+                        }
+                      },
+                child: const Text('Change'),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -527,10 +621,17 @@ class _ProfileTabState extends State<ProfileTab> {
                     }
                   },
                 ),
-                const ListTile(
-                  title: Text('Email Notifications'),
-                  subtitle: Text('Receive course updates via email'),
-                  trailing: Icon(Icons.chevron_right),
+                SwitchListTile(
+                  title: const Text('Email Notifications'),
+                  subtitle: const Text('Receive course updates via email'),
+                  value: _emailNotificationsEnabled,
+                  onChanged: (value) async {
+                    setState(() => _emailNotificationsEnabled = value);
+                    await _prefs.setEmailNotifications(value);
+                    if (mounted) {
+                      this.setState(() {});
+                    }
+                  },
                 ),
               ],
             ),
@@ -547,6 +648,10 @@ class _ProfileTabState extends State<ProfileTab> {
   }
 
   void _showLanguageDialog(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(
+      context,
+      listen: false,
+    );
     final languages = [
       'English',
       'Spanish',
@@ -554,31 +659,149 @@ class _ProfileTabState extends State<ProfileTab> {
       'German',
       'Hindi',
       'Mandarin',
+      'Tamil',
+      'Telugu',
+      'Kannada',
     ];
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Select Language'),
+        title: Text(
+          AppLocalizations.of(context)?.translate('language') ??
+              'Select Language',
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: languages.map((language) {
+              return RadioListTile<String>(
+                title: Text(language),
+                value: language,
+                groupValue: languageProvider.getLanguageName(
+                  languageProvider.locale,
+                ),
+                onChanged: (value) async {
+                  if (value != null) {
+                    await languageProvider.setLanguage(value);
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Language changed to $value')),
+                      );
+                    }
+                  }
+                },
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showHelpCenterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Contact Support'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: languages.map((language) {
-            return RadioListTile<String>(
-              title: Text(language),
-              value: language,
-              groupValue: _selectedLanguage,
-              onChanged: (value) async {
-                if (value != null) {
-                  await _prefs.setLanguage(value);
-                  setState(() => _selectedLanguage = value);
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Language changed to $value')),
-                  );
-                }
-              },
-            );
-          }).toList(),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'For any assistance, please contact:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            _buildContactItem(context, Icons.person, 'Name', 'Arendra'),
+            _buildContactItem(
+              context,
+              Icons.phone,
+              'Phone',
+              '9999802132',
+              onTap: () => _launchURL('tel:9999802132'),
+            ),
+            _buildContactItem(
+              context,
+              Icons.email,
+              'Email',
+              'arendra6268@gmail.com',
+              onTap: () => _launchURL('mailto:arendra6268@gmail.com'),
+            ),
+            _buildContactItem(
+              context,
+              Icons.chat,
+              'Social',
+              '@arendra_62',
+              subtitle: 'WhatsApp / Instagram',
+              onTap: () => _launchURL('https://instagram.com/arendra_62'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContactItem(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value, {
+    String? subtitle,
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                size: 20,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  ),
+                  Text(
+                    value,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  if (subtitle != null)
+                    Text(
+                      subtitle,
+                      style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                    ),
+                ],
+              ),
+            ),
+            if (onTap != null)
+              Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey[400]),
+          ],
         ),
       ),
     );
@@ -633,9 +856,20 @@ class _ProfileTabState extends State<ProfileTab> {
 
   Future<void> _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
+    final mode = url.startsWith('http')
+        ? LaunchMode.externalApplication
+        : LaunchMode.platformDefault;
+
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: mode);
+      } else {
+        // Fallback: try launching anyway
+        if (!await launchUrl(uri, mode: mode)) {
+          throw 'Could not launch';
+        }
+      }
+    } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(
           context,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:finlearn/l10n/app_localizations.dart';
 import 'tabs/home_tab.dart';
 import 'tabs/courses_tab.dart';
 import 'tabs/projects_tab.dart';
@@ -35,31 +36,31 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
         type: BottomNavigationBarType.fixed,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home_rounded),
-            label: 'Home',
+            icon: const Icon(Icons.home_outlined),
+            activeIcon: const Icon(Icons.home_rounded),
+            label: AppLocalizations.of(context)!.translate('nav_home'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book_outlined),
-            activeIcon: Icon(Icons.book_rounded),
-            label: 'Courses',
+            icon: const Icon(Icons.book_outlined),
+            activeIcon: const Icon(Icons.book_rounded),
+            label: AppLocalizations.of(context)!.translate('nav_courses'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.assignment_outlined),
-            activeIcon: Icon(Icons.assignment_rounded),
-            label: 'Projects',
+            icon: const Icon(Icons.assignment_outlined),
+            activeIcon: const Icon(Icons.assignment_rounded),
+            label: AppLocalizations.of(context)!.translate('nav_projects'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school_outlined),
-            activeIcon: Icon(Icons.school_rounded),
-            label: 'Learning',
+            icon: const Icon(Icons.school_outlined),
+            activeIcon: const Icon(Icons.school_rounded),
+            label: AppLocalizations.of(context)!.translate('nav_learning'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person_rounded),
-            label: 'Profile',
+            icon: const Icon(Icons.person_outline),
+            activeIcon: const Icon(Icons.person_rounded),
+            label: AppLocalizations.of(context)!.translate('nav_profile'),
           ),
         ],
       ),
